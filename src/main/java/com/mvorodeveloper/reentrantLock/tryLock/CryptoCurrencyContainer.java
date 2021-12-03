@@ -1,4 +1,4 @@
-package com.mvorodeveloper.reentrantLock;
+package com.mvorodeveloper.reentrantLock.tryLock;
 
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;

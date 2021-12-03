@@ -1,4 +1,4 @@
-package com.mvorodeveloper.reentrantLock;
+package com.mvorodeveloper.reentrantLock.tryLock;
 
 import java.util.HashMap;
 import java.util.Map;
