@@ -33,7 +33,9 @@ public class MatrixConsumer extends Thread {
             } catch (IOException ignored) {
             }
         }
+
         try {
+            // flush and close the writes to be sure that the data was correctly written to the file system
             fileWriter.flush();
             fileWriter.close();
         } catch (IOException e) {

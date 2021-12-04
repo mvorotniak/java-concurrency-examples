@@ -3,8 +3,6 @@ package com.mvorodeveloper.conditions.producerConsumer;
 import java.util.LinkedList;
 import java.util.Queue;
 
-import com.mvorodeveloper.conditions.producerConsumer.MatrixPair;
-
 /**
  * Thread safe queue for producer-consumer usage
  */
@@ -12,6 +10,7 @@ public class ThreadSafeQueue {
 
     private static final int QUEUE_CAPACITY = 5;
 
+    // signals the consumer that the producer has nothing more to offer and the consumer should terminate
     private boolean isTerminated = false;
     private boolean isEmpty = true;
 
@@ -22,7 +21,7 @@ public class ThreadSafeQueue {
      * @param matrixPair the {@link MatrixPair} to add to the queue
      */
     public synchronized void add(MatrixPair matrixPair) {
-        if (queue.size() == QUEUE_CAPACITY) {
+        while (queue.size() == QUEUE_CAPACITY) {
             try {
                 wait();
             } catch (InterruptedException ignored) {
@@ -31,6 +30,7 @@ public class ThreadSafeQueue {
 
         queue.add(matrixPair);
         isEmpty = false;
+        // wake up the consumer
         notify();
     }
 
@@ -40,7 +40,7 @@ public class ThreadSafeQueue {
      */
     public synchronized MatrixPair remove() {
         MatrixPair removedMatrixPair;
-        if(isEmpty && !isTerminated) {
+        while (isEmpty && !isTerminated) {
             try {
                 wait();
             } catch (InterruptedException ignored) {
@@ -59,6 +59,7 @@ public class ThreadSafeQueue {
 
         removedMatrixPair = queue.remove();
         if(queue.size() == QUEUE_CAPACITY - 1) {
+            // wake up the producer
             notifyAll();
         }
 
@@ -66,10 +67,12 @@ public class ThreadSafeQueue {
     }
 
     /**
-     * Stops queue operations
+     * Called by the producer to let the consumer know that no more matrix pairs will be added to the queue
+     * and the consumer should terminate it's work
      */
     public synchronized void terminate() {
         isTerminated = true;
+        // wake up all the consumer threads. The producer was completely decoupled
         notifyAll();
     }
 }

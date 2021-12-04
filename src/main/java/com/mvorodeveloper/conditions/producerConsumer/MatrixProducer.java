@@ -24,7 +24,7 @@ public class MatrixProducer extends Thread {
             float[][] matrix2 = readMatrix();
 
             if (matrix1 == null || matrix2 == null) {
-                System.out.println("No more matrices to read from file.");
+                System.out.println("No more matrices to read from file. Terminating producer...");
                 threadSafeQueue.terminate();
                 return;
             }
@@ -41,6 +41,7 @@ public class MatrixProducer extends Thread {
 
         for (int i = 0; i < size; i++) {
             if (!scanner.hasNext()) {
+                // no more content to read from the file
                 return null;
             }
             String[] lines = scanner.nextLine().split(",");

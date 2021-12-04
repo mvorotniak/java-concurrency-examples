@@ -53,6 +53,7 @@ public class MatricesUtils {
 
     /**
      * Performs a matrices multiplication
+     * c{ij} = a{i1}*b{1j} + a{i2}*b{2j} + ... + a{in}*b{nj} = sum{k=0}^{n-1} a{ik}*b{kj}
      */
     public static float[][] multiplyMatrices(float[][] matrix1, float[][] matrix2) {
         float[][] resultMatrix = new float[N][N];
